@@ -2,6 +2,7 @@ package model;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public class Game {
 	
-	private ArrayList<Clan> clans;
+	private ArrayList<Clan> clans = new ArrayList<Clan>();
 	
 	public Game() {
 		
@@ -29,45 +30,47 @@ public class Game {
 	}
 
 
-public static void Guarda(String nombreArchivo) throws Exception {
-		
+	public void read() throws Exception {
+		File archivo = new File("./data/data.dat");
+		if (archivo.exists()) {
+			
+			try {
+				FileInputStream fs = new FileInputStream(archivo);
+				ObjectInputStream ois = new ObjectInputStream(fs);
+				
+				ArrayList<Clan> auxClan = (ArrayList<Clan>) ois.readObject();
+				clans = auxClan;
+				
+				ois.close();
+				fs.close();
+				System.out.println("Archivo fue cargado ... ");
+			} catch (Exception e) {
+				// Se atrapan en este bloque todos los tipos de excepción
+				System.out.println("Error ... ");
 
-//		File archivo = new File(nombreArchivo);
-//		if (archivo.exists()) {
-//			// El archivo existe: se debe recuperar de allí el estado del modelo del mundo
-//			try {
-//				FileInputStream fs = new FileInputStream(archivo);
-//				ObjectInputStream ois = new ObjectInputStream(fs);
-//				Clan estu = (Clan) ois.readObject();
-//				Clan estu2 = (Clan) ois.readObject();
-//				System.out.println("Código: " + estu.getName());
-//				System.out.println("Código: " + estu2.getName());
-//				ois.close();
-//				System.out.println("Archivo fue cargado ... ");
-//			} catch (Exception e) {
-//				// Se atrapan en este bloque todos los tipos de excepción
-//				System.out.println("Error ... ");
-//
-//			}
-//		} else {
-//			// El archivo no existe: es la primera vez que se ejecuta el programa
-//			try {
-//				
-//				FileOutputStream fo = new FileOutputStream(archivo);
-//				ObjectOutputStream oos = new ObjectOutputStream(fo);
-//				
-//				for(int i = 0; i<clans.size();i++) {
-//					
-//				}
-//				oos.writeObject(est);
-//				oos.writeObject(est1);
-//
-//				oos.close();
-//
-//				System.out.println("Archivo fue creado ... ");
-//			} catch (IOException e) {
-//				System.out.println("Error ... ");
-//			}
-//		}
+			}
+		}
+	}
+	
+	public void write(){
+		File archivo = new File("./data/data.dat");
+		
+		try {
+			
+			FileOutputStream fo = new FileOutputStream(archivo);
+			ObjectOutputStream oos = new ObjectOutputStream(fo);				
+			
+			oos.writeObject(clans);
+
+			oos.close();
+			fo.close();
+
+			System.out.println("Archivo fue creado ... ");
+		} catch (FileNotFoundException e){
+			System.out.println("Error File... ");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

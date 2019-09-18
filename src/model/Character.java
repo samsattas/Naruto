@@ -1,19 +1,24 @@
 package model;
 
-public class Character {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Character implements Serializable{
 	private String name;
 	private String personality;
 	private String creationDate;
 	private String power;
-	private Technique technique;
+	private Character next;
+	private Technique firstTech;
 	
 	
-	public Character(String name, String personality, String creationDate, String power, Technique technique) {
+	public Character(String name, String personality, String creationDate, String power) {
 		this.name = name;
 		this.personality = personality;
 		this.creationDate = creationDate;
 		this.power = power;
-		this.technique = technique;
+		this.next = null;
+		this.firstTech = null;
 	}
 
 
@@ -55,16 +60,33 @@ public class Character {
 	public void setPower(String power) {
 		this.power = power;
 	}
-
-
-	public Technique getTechnique() {
-		return technique;
+	
+	
+	public Character getNext() {
+		return next;
 	}
 
 
-	public void setTechnique(Technique technique) {
-		this.technique = technique;
+	public void setNext(Character next) {
+		this.next = next;
 	}
-	
-	
+
+
+	public Technique getFirstTech() {
+		return firstTech;
+	}
+
+
+	public void setFirstTech(Technique firstTech) {
+		this.firstTech = firstTech;
+	}
+
+
+	public void addTechnique(Technique t) {
+		if (firstTech!=null) {
+			t.setNext(firstTech);
+			firstTech.setBack(t);
+		}	
+		firstTech = t;
+	}
 }

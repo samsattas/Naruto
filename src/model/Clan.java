@@ -1,13 +1,14 @@
 package model;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Clan {
+public class Clan implements Serializable{
 	private String name;
-	private ArrayList<Character> characters;
+	private Character firstCharacter;
 	
 	public Clan(String name) {
 		this.name = name;
+		this.firstCharacter = null;
 	}
 
 	public String getName() {
@@ -18,13 +19,20 @@ public class Clan {
 		this.name = name;
 	}
 
-	public ArrayList<Character> getCharacters() {
-		return characters;
+	public Character getFirstCharacter() {
+		return firstCharacter;
 	}
 
-	public void setCharacters(ArrayList<Character> characters) {
-		this.characters = characters;
+	public void setFirstCharacter(Character firstCharacter) {
+		this.firstCharacter = firstCharacter;
 	}
-	
-	
+
+	public void add(Character ch) {
+		if (firstCharacter==null) {
+			firstCharacter = ch;
+		} else {
+			ch.setNext(firstCharacter);
+			firstCharacter = ch;
+		}		
+	}
 }
