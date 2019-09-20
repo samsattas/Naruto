@@ -25,11 +25,41 @@ public class Game {
 		this.clans = clans;
 	}
 	
+	public int findByName(String n) {
+		int pos = -1;
+		boolean found = false;
+		for(int i=0; i<clans.size() && !found;i++) {
+			if(clans.get(i).getName().equals(n)) {
+				found = true;
+				pos = i;
+			}
+		}
+		return pos;
+	}
+	
 	public void addClan(Clan c) {
-		clans.add(c);
+		boolean repeat = false;
+		for(int i = 0; i<clans.size(); i++) {
+			if(clans.get(i).getName().equals(c.getName())) {
+				repeat = true;
+			}
+		}
+		if(!repeat) {
+			clans.add(c);
+		}
 	}
 
-
+	public void deleteClan(int c) {
+		clans.remove(c);
+	}
+	
+	
+	public void addCharacterToClan() {
+		boolean r = false;
+		
+	}
+	
+	
 	public void read() throws Exception {
 		File archivo = new File("./data/data.dat");
 		if (archivo.exists()) {
@@ -43,11 +73,9 @@ public class Game {
 				
 				ois.close();
 				fs.close();
-				System.out.println("Archivo fue cargado ... ");
-			} catch (Exception e) {
-				// Se atrapan en este bloque todos los tipos de excepción
-				System.out.println("Error ... ");
 
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -65,9 +93,6 @@ public class Game {
 			oos.close();
 			fo.close();
 
-			System.out.println("Archivo fue creado ... ");
-		} catch (FileNotFoundException e){
-			System.out.println("Error File... ");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

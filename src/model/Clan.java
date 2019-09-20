@@ -27,12 +27,25 @@ public class Clan implements Serializable{
 		this.firstCharacter = firstCharacter;
 	}
 
-	public void add(Character ch) {
+	public void addCh(Character ch) {
+		boolean r = false;
+		Character auxCh = firstCharacter;
 		if (firstCharacter==null) {
 			firstCharacter = ch;
 		} else {
-			ch.setNext(firstCharacter);
-			firstCharacter = ch;
+			while(firstCharacter.getNext()!=null) {
+				
+				if(auxCh.getName().equals(ch.getName())) {
+					r = true;
+				}else {
+					auxCh = auxCh.getNext();
+				}
+			}
+			if(!r) {
+				ch.setNext(firstCharacter);
+				firstCharacter = ch;
+			}
+			
 		}		
 	}
 }

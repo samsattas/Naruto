@@ -7,12 +7,12 @@ public class Character implements Serializable{
 	private String name;
 	private String personality;
 	private String creationDate;
-	private String power;
+	private double power;
 	private Character next;
 	private Technique firstTech;
 	
 	
-	public Character(String name, String personality, String creationDate, String power) {
+	public Character(String name, String personality, String creationDate, double power) {
 		this.name = name;
 		this.personality = personality;
 		this.creationDate = creationDate;
@@ -52,12 +52,12 @@ public class Character implements Serializable{
 	}
 
 
-	public String getPower() {
+	public double getPower() {
 		return power;
 	}
 
 
-	public void setPower(String power) {
+	public void setPower(double power) {
 		this.power = power;
 	}
 	
@@ -83,10 +83,38 @@ public class Character implements Serializable{
 
 
 	public void addTechnique(Technique t) {
-		if (firstTech!=null) {
-			t.setNext(firstTech);
-			firstTech.setBack(t);
-		}	
-		firstTech = t;
+		if (firstTech==null) {
+			firstTech = t;
+		}else {
+			Technique aux = firstTech;
+			Technique auxNext = firstTech.getNext();
+			boolean cent = false;
+			while(!cent) {
+				if(auxNext != null) {
+					if(aux.getFactor()<=t.getFactor() && auxNext.getFactor()>t.getFactor()) {
+						t.setNext(auxNext);
+						t.setBack(aux);
+						auxNext.setBack(t);
+						aux.setNext(t);
+						cent = true;
+					}else {
+						auxNext = auxNext.getNext();
+						aux = aux.getNext();
+					}
+				}else {
+					if(t.getFactor()>aux.getFactor()) {
+						aux.setNext(t);
+						t.setBack(aux);
+						cent = true;
+					}else {
+						aux.setBack(t);
+						t.setNext(aux);
+						firstTech = t;
+						cent = true;
+					}
+				}
+			}
+		}
+		
 	}
 }

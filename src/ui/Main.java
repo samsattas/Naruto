@@ -3,6 +3,8 @@ package ui;
 import java.util.Scanner;
 
 import model.*;
+import model.Character;
+
 
 public class Main {
 	public static void main(String[] args) throws Exception {
@@ -21,6 +23,7 @@ public class Main {
 			
 			if(select == 0) {
 				System.out.println("Hasta la proxima.");
+				game.write();
 				exit = true;
 				
 			}else if(select == 1) {//administrate clans
@@ -55,7 +58,10 @@ public class Main {
 							String date = s.nextLine();
 							
 							System.out.println("Ingrese el poder del personaje:");
-							String power = s.nextLine();
+							double power = s.nextDouble();
+							
+							Character ch = new Character(name, per, date, power);
+							game.getClans().get(i).addCh(ch);
 						} else if(select == 3) {
 							
 						} else if(select == 4) {
@@ -66,7 +72,7 @@ public class Main {
 					}while(!exit);
 					
 				}catch (NullPointerException e) {
-					System.out.println("ERROR: no existe ningun clan");
+					System.out.println("ERROR: No existe ningun clan");
 				}catch (IndexOutOfBoundsException e) {
 					System.out.println("ERROR: No existe el clan ingresado");
 				}
@@ -79,14 +85,34 @@ public class Main {
 				
 					Clan clan = new Clan(name);
 					game.addClan(clan);
-					game.write();
+					
 				}catch (NullPointerException e) {
 					System.out.println("ERROR: Entrada no valida.");
 				}
-			}else if (select == 3) {
+			}else if (select == 3) {//update clan
+				System.out.println("Seleccione el clan que desea actualizar:");
+				int i;
+				for(i = 0; i < game.getClans().size();i++) {
+					System.out.println(i + ") " + game.getClans().get(i).getName());
+				}
 				
-			}else if (select == 4) {
 				
+				i = s.nextInt();
+				
+				System.out.println("Ingrese el nuevo nombre del clan:");
+				s.nextLine();
+				game.getClans().get(i).setName(s.nextLine());
+			}else if (select == 4) {//delete clan
+				try {
+					s.nextLine();
+					System.out.println("Ingrese el nombre del clan que desea eliminar");
+					String toFind = s.nextLine();
+					
+					game.deleteClan(game.findByName(toFind));
+					System.out.println("Se ha eliminado exitosamente.");
+				}catch(NullPointerException e) {
+					System.out.println("ERROR: No existe el clan ingresado");
+				}
 			}else {
 				System.out.println("ERROR: Entrada no valida, intente de nuevo.");
 			}
@@ -106,24 +132,38 @@ public class Main {
 	}
 	
 	public void showGameMenu() {
-		System.out.println("Que desea hacer?:");
-		System.out.println("1.Administrar Clanes");
-		System.out.println("2.Aniadir Clan");
-		System.out.println("3.Modificar Clan");
-		System.out.println("4.Eliminar Clan");
-		System.out.println("0.Salir");
+		System.out.println(" _______________________________________________");
+		System.out.println("|              Que desea hacer?:                |");
+		System.out.println("|_______________________________________________|");
+		System.out.println("|1.Administrar Clanes                           |");
+		System.out.println("|2.Aniadir Clan                                 |");
+		System.out.println("|3.Actualizar Clan                              |");
+		System.out.println("|4.Eliminar Clan                                |");
+		System.out.println("|0.Salir                                        |");
+		System.out.println("|_______________________________________________|");
 	}
 	
 	public void showClanMenu() {
-		System.out.println("Que desea hacer?:");
-		System.out.println("1.Administrar Personajes");
-		System.out.println("2.Aniadir Personaje");
-		System.out.println("3.Modificar Personaje");
-		System.out.println("4.Eliminar Personaje");
-		System.out.println("0.Regresar");
+		System.out.println(" _______________________________________________");
+		System.out.println("|              Que desea hacer?:                |");
+		System.out.println("|_______________________________________________|");
+		System.out.println("|1.Administrar Personajes                       |");
+		System.out.println("|2.Aniadir Personaje                            |");
+		System.out.println("|3.Actualizar Personaje                         |");
+		System.out.println("|4.Eliminar Personaje                           |");
+		System.out.println("|0.Regresar                                     |");
+		System.out.println("|_______________________________________________|");
 	}
 	
 	public void showCharacterMenu() {
-		
+		System.out.println(" _______________________________________________");
+		System.out.println("|              Que desea hacer?:                |");
+		System.out.println("|_______________________________________________|");
+		System.out.println("|1.Administrar Tecnicas                         |");
+		System.out.println("|2.Aniadir Tecnica                              |");
+		System.out.println("|3.Actualizar Tecnica                           |");
+		System.out.println("|4.Eliminar Tecnica                             |");
+		System.out.println("|0.Regresar                                     |");
+		System.out.println("|_______________________________________________|");
 	}
 }
