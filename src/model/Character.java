@@ -3,12 +3,13 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Character implements Serializable{
+public class Character implements Serializable, Comparable<Character>{
 	private String name;
 	private String personality;
 	private String creationDate;
 	private double power;
 	private Character next;
+	private Character back;
 	private Technique firstTech;
 	
 	
@@ -18,6 +19,7 @@ public class Character implements Serializable{
 		this.creationDate = creationDate;
 		this.power = power;
 		this.next = null;
+		this.back = null;
 		this.firstTech = null;
 	}
 
@@ -62,15 +64,22 @@ public class Character implements Serializable{
 	}
 	
 	
+	public Character getBack() {
+		return back;
+	}
+
+
+	public void setBack(Character back) {
+		this.back = back;
+	}
+	
 	public Character getNext() {
 		return next;
 	}
 
-
 	public void setNext(Character next) {
 		this.next = next;
 	}
-
 
 	public Technique getFirstTech() {
 		return firstTech;
@@ -82,39 +91,71 @@ public class Character implements Serializable{
 	}
 
 
-	public void addTechnique(Technique t) {
+	public void addTech(Technique ch) {
+		boolean r = false;
+		Technique auxCh = firstTech;
 		if (firstTech==null) {
-			firstTech = t;
-		}else {
-			Technique aux = firstTech;
-			Technique auxNext = firstTech.getNext();
-			boolean cent = false;
-			while(!cent) {
-				if(auxNext != null) {
-					if(aux.getFactor()<=t.getFactor() && auxNext.getFactor()>t.getFactor()) {
-						t.setNext(auxNext);
-						t.setBack(aux);
-						auxNext.setBack(t);
-						aux.setNext(t);
-						cent = true;
-					}else {
-						auxNext = auxNext.getNext();
-						aux = aux.getNext();
-					}
+			firstTech = ch;
+		} else { 
+			while(auxCh.getNext()!=null) {
+				
+				if(auxCh.getName().equals(ch.getName())) {
+					r = true;
 				}else {
-					if(t.getFactor()>aux.getFactor()) {
-						aux.setNext(t);
-						t.setBack(aux);
+					auxCh = auxCh.getNext();
+				}
+			}
+			if(!r) {
+				ch.setNext(firstTech);
+				firstTech = ch;
+			}
+			
+		}		
+	} 
+	
+	public void deleteTech(String s) {
+		Technique aux = firstTech;
+		boolean cent = false;
+		while(!cent && aux!=null) {
+			if(aux.getName().equals(s)) {
+				firstTech = firstTech.getNext();
+				cent = true;
+			}else {
+				while(!cent && aux.getNext()!=null) {
+					if(aux.getNext().getName().equals(s)) {
 						cent = true;
+						if(aux.getNext().getNext()!=null) {
+							aux.setNext(aux.getNext().getNext());
+							
+						}else {
+							aux.setNext(null);
+						}
 					}else {
-						aux.setBack(t);
-						t.setNext(aux);
-						firstTech = t;
-						cent = true;
+						aux = aux.getNext();
 					}
 				}
 			}
 		}
-		
 	}
+	
+	public Technique searchByName(String n) {
+		Technique aux = null;
+		Technique first = firstTech;
+		
+		while(first != null) {
+			if(first.getName().equalsIgnoreCase(n)) {
+				aux = first;
+			}
+			first = first.getNext();
+			
+		}
+		return aux;
+	}
+
+	@Override
+	public int compareTo(Character c) {
+		int i = name.compareTo(c.getName());
+		return i;
+	}
+
 }
